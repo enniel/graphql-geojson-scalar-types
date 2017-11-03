@@ -17,6 +17,7 @@
   "scripts": {
     "clean": "rimraf lib dist es coverage",
     "lint": "eslint src demo",
+    "lint:fix": "eslint --fix src demo",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "build:umd": "cross-env BABEL_ENV=es NODE_ENV=development rollup -c -i src/index.js -o dist/graphql-geojson-scalar-types.js",
@@ -26,8 +27,10 @@
     "demo": "babel-node demo/index.js --plugins=transform-es2015-modules-commonjs"
   },
   "dependencies": {
-    "geojson-validation": "^0.1.6",
-    "graphql": "^0.11.7"
+    "geojson-validation": "^0.1.6"
+  },
+  "peerDependencies": {
+    "graphql": "^0.6.0 || ^0.7.0 || ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
