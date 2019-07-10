@@ -30,7 +30,6 @@ if (env === 'production') {
         pure_getters: true, // eslint-disable-line camelcase
         unsafe: true,
         unsafe_comps: true, // eslint-disable-line camelcase
-        warnings: false
       }
     })
   );
