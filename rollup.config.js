@@ -1,38 +1,78 @@
 import nodeResolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
-import uglify from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
 
-const env = process.env.NODE_ENV;
-const config = {
-  output: {
-    format: 'umd',
-    name: 'GraphqlGeojsonScalarTypes'
+import pkg from './package.json';
+
+export default [
+  // CommonJS
+  {
+    input: 'src/index.js',
+    output: { file: 'lib/graphql-geojson-scalar-types.js', format: 'cjs', indent: false },
+    external: [
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {})
+    ],
+    plugins: [ babel() ]
   },
-  plugins: [
-    nodeResolve({
-      jsnext: true
-    }),
-    babel({
-      exclude: 'node_modules/**'
-    }),
-    replace({
-      'process.env.NODE_ENV': JSON.stringify(env)
-    })
-  ],
-  external: [ 'graphql', 'geojson-validation' ]
-};
 
-if (env === 'production') {
-  config.plugins.push(
-    uglify({
-      compress: {
-        pure_getters: true, // eslint-disable-line camelcase
-        unsafe: true,
-        unsafe_comps: true // eslint-disable-line camelcase
-      }
-    })
-  );
-}
+  // ES
+  {
+    input: 'src/index.js',
+    output: { file: 'es/graphql-geojson-scalar-types.js', format: 'es', indent: false },
+    external: [
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {})
+    ],
+    plugins: [ babel() ]
+  },
 
-export default config;
+  // ES for Browsers
+  {
+    input: 'src/index.js',
+    output: { file: 'es/graphql-geojson-scalar-types.mjs', format: 'es', indent: false },
+    plugins: [
+      nodeResolve(),
+      replace({
+        'process.env.NODE_ENV': JSON.stringify('production')
+      }),
+      terser({
+        compress: {
+          pure_getters: true,
+          unsafe: true,
+          unsafe_comps: true,
+          warnings: false
+        }
+      })
+    ]
+  },
+
+  // UMD Production
+  {
+    input: 'src/index.js',
+    output: {
+      file: 'dist/graphql-geojson-scalar-types.min.js',
+      format: 'umd',
+      name: 'GraphQLGeoJSONScalarTypes',
+      indent: false
+    },
+    plugins: [
+      nodeResolve(),
+      babel({
+        exclude: 'node_modules/**'
+      }),
+      replace({
+        'process.env.NODE_ENV': JSON.stringify('production')
+      }),
+      terser({
+        compress: {
+          pure_getters: true,
+          unsafe: true,
+          unsafe_comps: true,
+          warnings: false
+        }
+      })
+    ]
+  }
+];
