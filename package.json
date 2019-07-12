@@ -3,9 +3,9 @@
   "version": "0.0.4",
   "description": "GeoJSON Scalar Types for Graphql",
   "license": "MIT",
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "jsnext:main": "es/index.js",
+  "main": "lib/graphql-geojson-scalar-types.js",
+  "module": "es/graphql-geojson-scalar-types.js",
+  "jsnext:main": "es/graphql-geojson-scalar-types.js",
   "homepage": "https://github.com/enniel/graphql-geojson-scalar-types",
   "bugs": {
     "url": "https://github.com/enniel/graphql-geojson-scalar-types/issues"
