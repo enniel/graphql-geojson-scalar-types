@@ -1,6 +1,6 @@
 {
   "name": "graphql-geojson-scalar-types",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "GeoJSON Scalar Types for Graphql",
   "license": "MIT",
   "main": "lib/graphql-geojson-scalar-types.js",
@@ -18,11 +18,7 @@
     "clean": "rimraf lib dist es coverage",
     "lint": "eslint src demo",
     "lint:fix": "eslint --fix src demo",
-    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
-    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
-    "build:umd": "cross-env BABEL_ENV=es NODE_ENV=development rollup -c -i src/index.js -o dist/graphql-geojson-scalar-types.js",
-    "build:umd:min": "cross-env BABEL_ENV=es NODE_ENV=production rollup -c -i src/index.js -o dist/graphql-geojson-scalar-types.min.js",
-    "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
+    "build": "rollup -c",
     "prepare": "npm run clean && npm run lint && npm run build",
     "demo": "babel-node demo/index.js --plugins=@babel/plugin-transform-modules-commonjs"
   },
