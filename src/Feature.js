@@ -1,14 +1,10 @@
-import { GraphQLScalarType, GraphQLError } from 'graphql';
+import { GraphQLScalarType } from 'graphql';
 const GJV = require('geojson-validation');
 
 import parseLiteral from './parseLiteral';
+import validator from './validator';
 
-const validate = value => {
-  if (!GJV.isFeature(value)) {
-    throw new GraphQLError(`Expected GeoJSON Feature but got: ${JSON.stringify(value)}`);
-  }
-  return value;
-};
+const validate = value => validator(GJV.isFeature,value);
 
 export default new GraphQLScalarType({
   name: 'GeoJSONFeatureScalar',

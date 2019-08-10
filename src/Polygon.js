@@ -1,14 +1,11 @@
-import { GraphQLScalarType, GraphQLError } from 'graphql';
+import { GraphQLScalarType } from 'graphql';
 const GJV = require('geojson-validation');
 
 import parseLiteral from './parseLiteral';
+import validator from './validator';
 
-const validate = value => {
-  if (!GJV.isPolygon(value)) {
-    throw new GraphQLError(`Expected GeoJSON Polygon but got: ${JSON.stringify(value)}`);
-  }
-  return value;
-};
+const validate = value => validator(GJV.isPolygon,value);
+
 
 export default new GraphQLScalarType({
   name: 'GeoJSONPolygonScalar',
