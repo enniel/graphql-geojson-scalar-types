@@ -1,14 +1,11 @@
-import { GraphQLScalarType, GraphQLError } from 'graphql';
+import { GraphQLScalarType } from 'graphql';
 const GJV = require('geojson-validation');
 
 import parseLiteral from './parseLiteral';
+import validator from './validator';
 
-const validate = value => {
-  if (!GJV.isPosition(value)) {
-    throw new GraphQLError(`Expected GeoJSON Position but got: ${JSON.stringify(value)}`);
-  }
-  return value;
-};
+const validate = value => validator(GJV.isPosition,value);
+
 
 export default new GraphQLScalarType({
   name: 'GeoJSONPositionScalar',
