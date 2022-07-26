@@ -1,14 +1,11 @@
-import { GraphQLScalarType, GraphQLError } from 'graphql';
+import { GraphQLScalarType } from 'graphql';
 const GJV = require('geojson-validation');
 
 import parseLiteral from './parseLiteral';
+import validator from './validator';
 
-const validate = value => {
-  if (!GJV.isMultiPoint(value)) {
-    throw new GraphQLError(`Expected GeoJSON MultiPoint but got: ${JSON.stringify(value)}`);
-  }
-  return value;
-};
+const validate = value => validator(GJV.isMultiPoint,value);
+
 
 export default new GraphQLScalarType({
   name: 'GeoJSONMultiPointScalar',
