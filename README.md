@@ -1,14 +1,14 @@
 # graphql-geojson-scalar-types
 
-GraphQL schema scalar types for GeoJSON. Based on [GeoJSON Validation](https://github.com/craveprogramminginc/GeoJSON-Validation).
+GraphQL schema scalar types for GeoJSON. Based on [GeoJSON Validation](https://gitlab.com/mjbecze/GeoJSON-Validation).
 
 ## Installation
 
 ```bash
-npm i -S graphql-geojson-scalar-types
+npm i graphql-geojson-scalar-types
 ```
 
-or with Yarn:
+or
 
 ```bash
 yarn add graphql-geojson-scalar-types
@@ -16,7 +16,7 @@ yarn add graphql-geojson-scalar-types
 
 ## Usage
 
-```js
+```ts
 import { GraphQLObjectType, GraphQLSchema } from 'graphql'
 import { Point } from 'graphql-geojson-scalar-types'
 
@@ -31,6 +31,13 @@ export default new GraphQLSchema({
           coordinates: [-105.01621, 39.57422],
         }),
       },
+      pointInvalid: {
+        type: Point,
+        resolve: () => ({
+          type: 'Invalid',
+          coordinates: [-105.01621, 39.57422],
+        }),
+      },
     }),
   }),
 })
@@ -41,10 +48,21 @@ Then you can query it like this:
 ```graphql
 query {
   point
+  pointInvalid
 }
 ```
 
 ## Demo
+
+```bash
+npm run demo
+```
+
+or
+
+```bash
+yarn demo
+```
 
 An example GraphQL server implementation is available here:
 [demo](https://github.com/enniel/graphql-geojson-scalar-types/tree/master/demo)

@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "lib": ["dom", "es2017"],
+    "declaration": true,
+    "declarationDir": "./types",
+    "sourceMap": true,
+    "removeComments": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "typeRoots": ["./geojson-validation.d.ts"],
+    "baseUrl": "./"
+  },
+  "include": ["**/*.js", "src/**/*.ts", "demo/*.ts", "tests/*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,78 +1,72 @@
-import nodeResolve from 'rollup-plugin-node-resolve';
-import babel from 'rollup-plugin-babel';
-import replace from 'rollup-plugin-replace';
-import { terser } from 'rollup-plugin-terser';
+import { defineConfig } from 'rollup';
+import nodeResolve from '@rollup/plugin-node-resolve';
+import babel from '@rollup/plugin-babel';
+import typescript from 'rollup-plugin-typescript2';
 
 import pkg from './package.json';
 
-export default [
+const extensions = ['.ts'];
+const noDeclarationFiles = { compilerOptions: { declaration: false } };
+
+const babelRuntimeVersion = pkg.dependencies['@babel/runtime'].replace(
+  /^[^0-9]*/,
+  '',
+);
+
+const tsconfigPath = 'tsconfig.build.json';
+
+const external = [
+  ...Object.keys(pkg.dependencies || {}),
+  ...Object.keys(pkg.peerDependencies || {}),
+].map((name) => RegExp(`^${name}($|/)`));
+
+export default defineConfig([
   // CommonJS
   {
-    input: 'src/index.js',
+    input: 'src/index.ts',
     output: { file: 'lib/graphql-geojson-scalar-types.js', format: 'cjs', indent: false },
-    external: [
-      ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.peerDependencies || {})
+    external,
+    plugins: [
+      nodeResolve({
+        extensions,
+      }),
+      typescript({
+        useTsconfigDeclarationDir: true,
+        tsconfig: tsconfigPath,
+      }),
+      babel({
+        extensions,
+        plugins: [
+          ['@babel/plugin-transform-runtime', { version: babelRuntimeVersion }],
+        ],
+        babelHelpers: 'runtime',
+      }),
     ],
-    plugins: [ babel() ]
   },
 
   // ES
   {
-    input: 'src/index.js',
+    input: 'src/index.ts',
     output: { file: 'es/graphql-geojson-scalar-types.js', format: 'es', indent: false },
-    external: [
-      ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.peerDependencies || {})
-    ],
-    plugins: [ babel() ]
-  },
-
-  // ES for Browsers
-  {
-    input: 'src/index.js',
-    output: { file: 'es/graphql-geojson-scalar-types.mjs', format: 'es', indent: false },
+    external,
     plugins: [
-      nodeResolve(),
-      replace({
-        'process.env.NODE_ENV': JSON.stringify('production')
+      nodeResolve({
+        extensions,
       }),
-      terser({
-        compress: {
-          pure_getters: true,
-          unsafe: true,
-          unsafe_comps: true,
-          warnings: false
-        }
-      })
-    ]
-  },
-
-  // UMD Production
-  {
-    input: 'src/index.js',
-    output: {
-      file: 'dist/graphql-geojson-scalar-types.min.js',
-      format: 'umd',
-      name: 'GraphQLGeoJSONScalarTypes',
-      indent: false
-    },
-    plugins: [
-      nodeResolve(),
+      typescript({
+        tsconfigOverride: noDeclarationFiles,
+        tsconfig: tsconfigPath,
+      }),
       babel({
-        exclude: 'node_modules/**'
+        extensions,
+        plugins: [
+          [
+            '@babel/plugin-transform-runtime',
+            { version: babelRuntimeVersion, useESModules: true },
+          ],
+        ],
+        babelHelpers: 'runtime',
       }),
-      replace({
-        'process.env.NODE_ENV': JSON.stringify('production')
-      }),
-      terser({
-        compress: {
-          pure_getters: true,
-          unsafe: true,
-          unsafe_comps: true,
-          warnings: false
-        }
-      })
-    ]
-  }
-];
+    ],
+  },
+]);

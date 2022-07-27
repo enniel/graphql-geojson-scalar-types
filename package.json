@@ -5,7 +5,19 @@
   "license": "MIT",
   "main": "lib/graphql-geojson-scalar-types.js",
   "module": "es/graphql-geojson-scalar-types.js",
-  "jsnext:main": "es/graphql-geojson-scalar-types.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "lib",
+    "es",
+    "src",
+    "types",
+    "geojson-validation.d.ts"
+  ],
+  "keywords": [
+    "graphql",
+    "geojson",
+    "geo"
+  ],
   "homepage": "https://github.com/enniel/graphql-geojson-scalar-types",
   "bugs": {
     "url": "https://github.com/enniel/graphql-geojson-scalar-types/issues"
@@ -14,40 +26,59 @@
     "type": "git",
     "url": "http://github.com/enniel/graphql-geojson-scalar-types.git"
   },
+  "author": "Evgenij Razumov <razumov.evgeni@gmail.com>",
   "scripts": {
-    "clean": "rimraf lib dist es coverage",
-    "lint": "eslint src demo",
-    "lint:fix": "eslint --fix src demo",
-    "build": "rollup -c",
-    "prepare": "npm run clean && npm run lint && npm run build",
-    "demo": "babel-node demo/index.js --plugins=@babel/plugin-transform-modules-commonjs"
+    "clean": "rimraf lib es types",
+    "lint": "eslint *.{js,ts}",
+    "lint:fix": "eslint --fix *.{js,ts}",
+    "check:types": "tsc --noEmit",
+    "build": "yarn clean && rollup -c",
+    "demo": "nodemon --exec 'ts-node --project tsconfig.demo.json demo/index.ts'",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register --full-trace tests/**/*-test.ts",
+    "test:cover": "c8 yarn test",
+    "lefthook:install": "lefthook install",
+    "lefthook:pre-push": "lefthook run pre-push",
+    "lefthook:pre-commit": "lefthook run pre-commit"
   },
   "dependencies": {
-    "geojson-validation": "^0.2.1"
+    "@babel/runtime": "^7.18.9",
+    "geojson-validation": "^1.0.2"
   },
   "peerDependencies": {
-    "graphql": "^0.6.0 || ^0.7.0 || ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0"
+    "graphql": "*"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.0",
-    "@babel/core": "^7.5.4",
-    "@babel/node": "^7.5.0",
-    "@babel/plugin-external-helpers": "^7.2.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
-    "@babel/plugin-transform-modules-commonjs": "^7.5.0",
-    "@babel/preset-env": "^7.5.4",
-    "@babel/register": "^7.4.4",
-    "babel-eslint": "^10.0.2",
-    "cross-env": "^5.2.0",
-    "eslint": "^6.0.1",
-    "eslint-plugin-babel": "^5.3.0",
-    "express": "^4.17.1",
-    "express-graphql": "^0.8.0",
-    "rimraf": "^2.6.3",
-    "rollup": "^1.16.7",
-    "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-replace": "^2.2.0",
-    "rollup-plugin-terser": "^5.1.1"
+    "@babel/core": "^7.18.9",
+    "@babel/eslint-parser": "^7.18.9",
+    "@babel/plugin-transform-runtime": "^7.18.9",
+    "@babel/preset-env": "^7.18.9",
+    "@babel/preset-typescript": "^7.18.6",
+    "@evilmartians/lefthook": "^1.0.5",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-replace": "^4.0.0",
+    "@types/chai": "^4.3.1",
+    "@types/express": "^4.17.13",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^18.6.1",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.30.7",
+    "c8": "^7.12.0",
+    "chai": "^4.3.6",
+    "eslint": "^8.20.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-import-resolver-typescript": "^3.3.0",
+    "eslint-plugin-import": "^2.26.0",
+    "express": "^4.18.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "15.3.0",
+    "mocha": "^10.0.0",
+    "nodemon": "^2.0.19",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.77.1",
+    "rollup-plugin-typescript2": "^0.32.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
   }
 }

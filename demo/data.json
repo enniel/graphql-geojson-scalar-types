@@ -6,6 +6,7 @@
       39.57422
     ]
   },
+  "bbox": [-180.0, -90.0, 180.0, 90.0],
   "multiPoint": {
     "type": "MultiPoint",
     "coordinates": [
