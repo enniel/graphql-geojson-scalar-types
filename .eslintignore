@@ -1,3 +1,4 @@
-es/*.js
-lib/*.js
-dist/*.js
+es/**
+lib/**
+dist/**
+geojson-validation.d.ts

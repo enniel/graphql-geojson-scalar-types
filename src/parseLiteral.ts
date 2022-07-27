@@ -1,6 +1,6 @@
-import { Kind } from 'graphql';
+import { Kind, ValueNode } from 'graphql';
 
-export default function parseLiteral(ast) {
+export function parseLiteral(ast: ValueNode): unknown {
   switch (ast.kind) {
     case Kind.STRING:
     case Kind.BOOLEAN:
@@ -10,10 +10,9 @@ export default function parseLiteral(ast) {
       return parseFloat(ast.value);
     case Kind.OBJECT: {
       const value = Object.create(null);
-      ast.fields.forEach(field => {
+      ast.fields.forEach((field) => {
         value[field.name.value] = parseLiteral(field.value);
       });
-
       return value;
     }
     case Kind.LIST:

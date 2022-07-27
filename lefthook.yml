@@ -1,0 +1,16 @@
+x-commands: &commands
+  lint:
+    glob: "*.{ts}"
+    run: yarn lint
+  types:
+    glob: "*.{ts}"
+    run: yarn check:types
+  test:
+    glob: "*.{ts}"
+    run: yarn test
+
+pre-push:
+  commands: *commands
+
+pre-commit:
+  commands: *commands
