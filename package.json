@@ -1,6 +1,6 @@
 {
   "name": "graphql-geojson-scalar-types",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "GeoJSON Scalar Types for Graphql",
   "license": "MIT",
   "main": "lib/graphql-geojson-scalar-types.js",
